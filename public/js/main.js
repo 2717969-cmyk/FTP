@@ -100,64 +100,6 @@ updatePrice();
 // Блок для оплаты
 
 document.getElementById('buyBtn').addEventListener('click', async () => {
-    // try {
-    //     // ----------------------------
-    //     // 1️⃣ Заглушка оплаты
-    //     // В будущем здесь будет виджет YooMoney / другой платёжный сервис
-    //     // Пока просто имитируем успешную оплату
-    //     const paymentSuccess = true; // заглушка
-    //     if (!paymentSuccess) throw new Error('Платёж не прошёл');
-
-    //     // ----------------------------
-    //     // 2️⃣ Генерация ссылки на скачивание после оплаты
-    //     const filename = 'pack.zip'; // имя реального файл
-    //     const res = await fetch('/api/generate-download', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ filename })
-    //     });
-
-    //     const data = await res.json();
-
-    //     if (data.url) {
-    //         console.log('Ссылка на скачивание:', data.url);
-
-    //         // ----------------------------
-    //         // 3️⃣ Перенаправление пользователя на скачивание
-    //         window.location.href = data.url;
-    //     } else {
-    //         alert('Не удалось создать ссылку на скачивание');
-    //     }
-    // } catch (err) {
-    //     console.error('Ошибка при покупке/скачивании:', err);
-    //     alert('Ошибка при оплате или подготовке скачивания. Попробуйте позже.');
-    // }
-    // имитация успешной оплаты
-    // try {
-    //     // 1️⃣ Здесь имитация успешной оплаты (пока заглушка)
-    //     const paymentSuccess = true;
-    //     if (!paymentSuccess) throw new Error('Платёж не прошёл');
-
-    //     // 2️⃣ Генерация одноразовой ссылки на скачивание
-    //     const filename = 'pack.zip'; // реальный файл в public/downloads
-    //     const res = await fetch('/api/download/generate-download', {
-    //         method: 'POST',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify({ filename })
-    //     });
-
-    //     const data = await res.json();
-
-    //     if (data.url) {
-    //         // 3️⃣ Перенаправление на скачивание
-    //         window.location.href = data.url;
-    //     } else {
-    //         alert('Не удалось создать ссылку на скачивание');
-    //     }
-    // } catch (err) {
-    //     console.error('Ошибка при покупке/скачивании:', err);
-    //     alert('Ошибка при оплате или подготовке скачивания. Попробуйте позже.');
-    // }
     try {
       const response = await fetch('/api/payment/create-payment', {
         method: 'POST',

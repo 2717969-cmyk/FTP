@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const { generateToken } = require('./download'); // используем из download.js
 
 const shopId = process.env.YOOKASSA_SHOP_ID || '1152688';
-const secretKey = process.env.YOOKASSA_SECRET || 'test_secret_key';
+const secretKey = process.env.YOOKASSA_SECRET || 'test_vXhN6nzVtqVxM4xlqEWPNoi4cK5wQ8Ol3NgFW3ZFrE4';
 
 const yooKassa = new YooKassa({ shopId, secretKey });
 
@@ -35,7 +35,7 @@ router.get('/confirm', async (req, res) => {
     const payment = await yooKassa.getPayment(paymentId);
 
     if (payment.status === 'succeeded') {
-      const token = generateToken('test.pdf'); // ⚡ здесь укажи реальный файл
+      const token = generateToken('pack.zip'); // ⚡ здесь укажи реальный файл
       return res.json({ downloadUrl: `/api/download/${token}` });
     } else {
       return res.json({ status: payment.status });
