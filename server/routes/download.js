@@ -46,4 +46,4 @@ router.get('/:token', (req, res) => {
     res.download(filePath);
 });
 
-module.exports = router;
+module.exports = { router, generateToken };

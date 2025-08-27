@@ -98,6 +98,7 @@ async function handlePurchase(filename) {
 updatePrice();
 
 // Блок для оплаты
+
 document.getElementById('buyBtn').addEventListener('click', async () => {
     // try {
     //     // ----------------------------
@@ -131,30 +132,51 @@ document.getElementById('buyBtn').addEventListener('click', async () => {
     //     console.error('Ошибка при покупке/скачивании:', err);
     //     alert('Ошибка при оплате или подготовке скачивания. Попробуйте позже.');
     // }
+    // имитация успешной оплаты
+    // try {
+    //     // 1️⃣ Здесь имитация успешной оплаты (пока заглушка)
+    //     const paymentSuccess = true;
+    //     if (!paymentSuccess) throw new Error('Платёж не прошёл');
+
+    //     // 2️⃣ Генерация одноразовой ссылки на скачивание
+    //     const filename = 'pack.zip'; // реальный файл в public/downloads
+    //     const res = await fetch('/api/download/generate-download', {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({ filename })
+    //     });
+
+    //     const data = await res.json();
+
+    //     if (data.url) {
+    //         // 3️⃣ Перенаправление на скачивание
+    //         window.location.href = data.url;
+    //     } else {
+    //         alert('Не удалось создать ссылку на скачивание');
+    //     }
+    // } catch (err) {
+    //     console.error('Ошибка при покупке/скачивании:', err);
+    //     alert('Ошибка при оплате или подготовке скачивания. Попробуйте позже.');
+    // }
     try {
-        // 1️⃣ Здесь имитация успешной оплаты (пока заглушка)
-        const paymentSuccess = true;
-        if (!paymentSuccess) throw new Error('Платёж не прошёл');
+      const response = await fetch('/api/payment/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
 
-        // 2️⃣ Генерация одноразовой ссылки на скачивание
-        const filename = 'pack.zip'; // реальный файл в public/downloads
-        const res = await fetch('/api/download/generate-download', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ filename })
-        });
+      const data = await response.json();
 
-        const data = await res.json();
-
-        if (data.url) {
-            // 3️⃣ Перенаправление на скачивание
-            window.location.href = data.url;
-        } else {
-            alert('Не удалось создать ссылку на скачивание');
-        }
+      if (data.confirmationUrl) {
+        // добавим paymentId в success.html
+        const url = new URL(data.confirmationUrl);
+        url.searchParams.set('paymentId', data.paymentId);
+        window.location.href = url.toString();
+      } else {
+        alert('Ошибка при создании платежа');
+      }
     } catch (err) {
-        console.error('Ошибка при покупке/скачивании:', err);
-        alert('Ошибка при оплате или подготовке скачивания. Попробуйте позже.');
+      console.error('Ошибка при оплате:', err);
+      alert('Ошибка при оплате');
     }
 });
 

@@ -5,8 +5,32 @@
   <title>Оплата успешна</title>
 </head>
 <body>
-  <h1>Спасибо за покупку!</h1>
-  <p>Скачивание доступно 🎉</p>
-  <a href="/">Вернуться на главную</a>
+  <h1>Спасибо за оплату!</h1>
+  <div id="download-container">Проверяем оплату...</div>
+
+  <script>
+    async function checkPayment() {
+      const params = new URLSearchParams(window.location.search);
+      const paymentId = params.get('paymentId');
+
+      if (!paymentId) {
+        document.getElementById('download-container').innerText = 'Ошибка: нет ID платежа';
+        return;
+      }
+
+      const response = await fetch(`/api/payment/confirm?paymentId=${paymentId}`);
+      const data = await response.json();
+
+      if (data.downloadUrl) {
+        document.getElementById('download-container').innerHTML =
+          `<a href="${data.downloadUrl}">Скачать файл</a>`;
+      } else {
+        document.getElementById('download-container').innerText =
+          `Статус платежа: ${data.status}`;
+      }
+    }
+
+    checkPayment();
+  </script>
 </body>
 </html>
