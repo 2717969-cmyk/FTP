@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Пакет шаблонов для фрилансеров</title>
+
+<!-- Swiper -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+<!-- Наши стили -->
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-44NLJT323C"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+// Включаем debug mode, чтобы события шли в DebugView
+  gtag('set', 'debug_mode', true);
+  
+  gtag('js', new Date());
+  gtag('config', 'G-44NLJT323C', {
+    'send_page_view': true,
+    'page_path': window.location.pathname
+  });
+
+  // Тестовое событие для проверки DebugView
+  gtag('event', 'debug_test', {
+    'event_category': 'Debug',
+    'event_label': 'ngrok_test',
+    'value': 1
+  });
+</script>
+
+</head>
+<body>
+
+<header>
+<h1>Пакет шаблонов для фрилансеров</h1>
+<p>Готовые отклики, чек-листы, таблицы и документы для безопасной и эффективной работы с клиентами</p>
+<a href="#buy" class="btn-buy">Купить пакет</a>
+</header>
+
+<div class="container">
+<!-- Блок описания продукта с вкладками -->
+<div class="product-tabs" style="background:white; padding:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.05); margin-bottom:40px;">
+  <h2>Описание продукта</h2>
+  <div class="tabs">
+    <button class="tablink active" data-tab="tab1">Описание</button>
+    <button class="tablink" data-tab="tab2">Что входит в пакет</button>
+    <button class="tablink" data-tab="tab3">Кому подойдёт</button>
+    <button class="tablink" data-tab="tab4">Почему работает</button>
+  </div>
+
+  <div id="tab1" class="tabcontent" style="display:block; padding-top:10px;">
+    <p><strong>Пакет шаблонов для фрилансера: Начни получать заказы быстрее, чем думаешь!</strong></p>
+    <p>Это не просто набор документов — это готовая система, которая поможет вам перейти от поиска заказов к стабильному и профессиональному фрилансу. Мы собрали все ключевые инструменты в одном месте, чтобы вы могли сосредоточиться на главном — выполнении проектов и росте дохода.</p>
+  </div>
+
+  <div id="tab2" class="tabcontent" style="display:none; padding-top:10px;">
+    <ul>
+      <li><strong>Пакет шаблонов для фрилансеров:</strong> Более 20 готовых откликов, чек-листы, таблица учёта проектов.</li>
+      <li><strong>Юридические шаблоны:</strong> Договор и гарантийные письма.</li>
+      <li><strong>Актуальные списки фриланс-платформ и чатов:</strong> Англоязычные и русскоязычные.</li>
+    </ul>
+  </div>
+
+  <div id="tab3" class="tabcontent" style="display:none; padding-top:10px;">
+    <ul>
+      <li>Новичкам, которые только начинают свой путь во фрилансе и хотят быстрее найти первые заказы.</li>
+      <li>Опытным фрилансерам, которые хотят систематизировать работу и защитить себя от рисков.</li>
+    </ul>
+  </div>
+
+  <div id="tab4" class="tabcontent" style="display:none; padding-top:10px;">
+    <ul>
+      <li>Экономия времени: все готово, не тратим часы на документы.</li>
+      <li>Увеличение дохода: профессиональная подача и юридическая защищённость.</li>
+      <li>Надёжность: уверенность на каждом этапе работы с клиентом.</li>
+    </ul>
+  </div>
+</div>
+<h2>Что входит в пакет</h2>
+<div class="downloads">
+
+<!-- PDF -->
+<div class="download-card">
+    <img src="icons/pdf-icon.png" alt="PDF">
+    <h3>FreelanceTemplatePack.pdf</h3>
+    <p>Готовые отклики и чек-лист</p>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="screenshots/pdf0.png" alt="PDF 1"></div>
+            <div class="swiper-slide"><img src="screenshots/pdf1.png" alt="PDF 1"></div>
+            <div class="swiper-slide"><img src="screenshots/pdf2.png" alt="PDF 2"></div>
+            <div class="swiper-slide"><img src="screenshots/pdf3.png" alt="PDF 3"></div>
+            <div class="swiper-slide"><img src="screenshots/pdf4.png" alt="PDF 4"></div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
+
+<!-- Excel -->
+<div class="download-card">
+    <img src="icons/xlsx-icon.png" alt="Excel">
+    <h3>Учёт заказов</h3>
+    <p>Excel-таблицы</p>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="screenshots/xlsx1.png" alt="Excel 1"></div>
+            <div class="swiper-slide"><img src="screenshots/xlsx2.png" alt="Excel 2"></div>
+            <div class="swiper-slide"><img src="screenshots/xlsx3.png" alt="Excel 2"></div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
+
+<!-- DOCX -->
+<div class="download-card">
+    <img src="icons/docx-icon.png" alt="Word">
+    <h3>Шаблоны документов</h3>
+    <p>Договор и гарантийные письма</p>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="screenshots/docx1.png" alt="Договор"></div>
+            <div class="swiper-slide"><img src="screenshots/docx2.png" alt="Гарант Исполнителя"></div>          
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
+
+<!-- Биржи -->
+<div class="download-card">
+    <img src="icons/xlsx-icon.png" alt="Excel">
+    <h3>Биржи и чаты</h3>
+    <p>Таблицы с сылками на российские и международные платформы</p>
+</div>
+
+<!-- Инструкция -->
+<div class="download-card">
+    <img src="icons/pdf-icon.png" alt="PDF">
+    <h3>Инструкция</h3>
+    <p>Пошаговое руководство</p>
+</div>
+
+</div>
+
+<h2>Преимущества</h2>
+<div class="advantages">
+<div class="adv-item"><h4>⏱ Быстро</h4><p>Экономия времени</p></div>
+<div class="adv-item"><h4>💼 Профессионально</h4><p>Шаблоны соответствуют требованиям</p></div>
+<div class="adv-item"><h4>🗂 Удобно</h4><p>PDF, Excel, Word</p></div>
+<div class="adv-item"><h4>🌐 Универсально</h4><p>Для российских и международных платформ</p></div>
+</div>
+
+<h2 id="buy">Купить пакет</h2>
+<p>Вы получаете весь пакет одним ZIP.</p>
+<p>Цена: <span id="price">1000 ₽</span> <span id="discountLabel"></span></p>
+<p id="remainingLabel"></p>
+<a href="#" class="btn-buy" id="buyBtn">Купить пакет</a>
+
+<!-- Модальные окна -->
+<div class="modal" id="purchaseModal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2>Спасибо за покупку!</h2>
+    <p>Ссылка для скачивания появится после оплаты.</p>
+  </div>
+</div>
+
+<div class="imgModal" id="imgModal">
+  <div class="imgModal-content">
+    <span class="close" id="closeImgModal">&times;</span>
+    <div class="swiper imgSwiper"><div class="swiper-wrapper" id="imgModalWrapper"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Блок оплаты -->
+<div id="paymentModal" class="paymentModal">
+  <div class="paymentModal-content">
+    <span class="close">&times;</span>
+    <h2>Оплата пакета</h2>
+    <!-- Вставь сюда скрипт кнопки из YooKassa -->
+    <div id="yoomoney-widget"></div>
+  </div>
+</div>
+
+<!-- Блок отзывов -->
+<h2>Отзывы</h2>
+<div class="reviews-section">
+  <p id="noReviews">Пока отзывов нет. Ваш будет первым!</p>
+  <div id="reviewsContainer">
+    <!-- Здесь будут добавляться отзывы через JS -->
+  </div>
+
+  <h3>Оставьте отзыв</h3>
+  <input type="text" id="reviewName" placeholder="Ваше имя">
+  <textarea id="reviewText" placeholder="Ваш отзыв"></textarea>
+  <button id="addReview">Отправить</button>
+</div>
+
+<div class="contact-form">
+<h3>Обратная связь</h3>
+<input type="text" id="contactName" placeholder="Ваше имя">
+<input type="email" id="contactEmail" placeholder="E-mail">
+<textarea id="contactMessage" placeholder="Сообщение"></textarea>
+<button id="sendFeedback">Отправить</button>
+<p id="feedbackStatus"></p>
+</div>
+
+<footer>© 2025 Пакет шаблонов для фрилансеров. Все права защищены.(ИНН 590309829940)</footer>
+
+<!-- Swiper -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<!-- Наш JS -->
+<script src="js/main.js"></script>
+
+</body>
+</html>
