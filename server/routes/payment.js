@@ -14,12 +14,16 @@ router.post('/create-payment', async (req, res) => {
   try {
     const payment = await yooKassa.createPayment({
       amount: { value: '300.00', currency: 'RUB' },
-      confirmation: { type: 'redirect', return_url: 'https://ftp-3piv.onrender.com/success.html' },
+      confirmation: { type: 'redirect', return_url: `https://ftp-3piv.onrender.com/success.html` },
       capture: true,
       description: 'Оплата пакета файлов',
     }, uuidv4());
 
-    res.json({ confirmationUrl: payment.confirmation.confirmation_url, paymentId: payment.id });
+     // вручную добавляем paymentId в ссылку
+    const url = new URL(payment.confirmation.confirmation_url);
+    url.searchParams.set('paymentId', payment.id);
+
+    res.json({ confirmationUrl: url.toString(), paymentId: payment.id });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Ошибка создания платежа' });
