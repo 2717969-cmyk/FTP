@@ -111,11 +111,11 @@ document.getElementById('buyBtn').addEventListener('click', async () => {
       if (data.confirmationUrl) {
         // открываем в новой вкладке
         window.open(data.confirmationUrl, '_blank');
-        
+
         // добавим paymentId в success.html
         const url = new URL(data.confirmationUrl);
         url.searchParams.set('paymentId', data.paymentId);
-        window.location.href = url.toString();
+        
       } else {
         alert('Ошибка при создании платежа');
       }
@@ -235,8 +235,6 @@ tablinks.forEach(btn => {
 });
 
 // --- Кастомные события для GA4 ---
-
-// Отслеживание клика на кнопку "Купить пакет" - перенесен в блок для оплаты
 
 // Отслеживание клика на карточки скачивания
 document.querySelectorAll('.download-card img').forEach(img => {
