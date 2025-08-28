@@ -158,20 +158,19 @@ function gtag(){dataLayer.push(arguments);}
 <div class="adv-item"><h4>🌐 Универсально</h4><p>Для российских и международных платформ</p></div>
 </div>
 
+<!-- Новый блок оплаты через виджет -->
+<div id="paymentWidgetContainer" style="margin-top:20px;"></div>
+
+<!-- Ссылка для скачивания после успешной оплаты -->
+<div id="downloadContainer" style="display:none; margin-top:20px;">
+  <a id="downloadLink" href="" target="_blank">Скачать файл</a>
+</div>
+
 <h2 id="buy">Купить пакет</h2>
 <p>Вы получаете весь пакет одним ZIP.</p>
 <p>Цена: <span id="price">500 ₽</span> <span id="discountLabel"></span></p>
 <p id="remainingLabel"></p>
 <a href="#" class="btn-buy" id="buyBtnBottom">Купить пакет</a>
-
-<!-- Модальные окна -->
-<div class="modal" id="purchaseModal">
-  <div class="modal-content">
-    <span class="close" id="closeModal">&times;</span>
-    <h2>Спасибо за покупку!</h2>
-    <p>Ссылка для скачивания появится после оплаты.</p>
-  </div>
-</div>
 
 <div class="imgModal" id="imgModal">
   <div class="imgModal-content">
@@ -183,7 +182,7 @@ function gtag(){dataLayer.push(arguments);}
   </div>
 </div>
 
-<!-- Блок оплаты -->
+<!-- Блок оплаты
 <div id="paymentModal" class="paymentModal">
   <div class="paymentModal-content">
     <span class="close">&times;</span>
@@ -191,7 +190,9 @@ function gtag(){dataLayer.push(arguments);}
     <div id="yoomoney-widget"></div>
     
   </div>
-</div>
+</div> -->
+
+
 
 <!-- Блок отзывов -->
 <h2>Отзывы</h2>

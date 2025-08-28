@@ -72,66 +72,8 @@ function updatePrice() {
     remainingLabel.textContent = remaining;
 }
 
-// После успешной оплаты создаём одноразовую ссылку
-async function handlePurchase(filename) {
-    try {
-        const res = await fetch('/api/generate-download', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ filename })
-        });
-        const data = await res.json();
-
-        if (data.url) {
-            // Перенаправляем пользователя на скачивание
-            window.location.href = data.url;
-        } else {
-            alert('Не удалось создать ссылку на скачивание');
-        }
-    } catch (err) {
-        console.error('Ошибка генерации ссылки:', err);
-        alert('Ошибка при подготовке скачивания');
-    }
-}
-
 // Инициализация цены при загрузке страницы
 updatePrice();
-
-// Блок для оплаты
-
-document.getElementById('buyBtnBottom').addEventListener('click', async (event) => {
-    event.preventDefault();
-    try {
-      const response = await fetch('/api/payment/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-
-      const data = await response.json();
-
-      if (data.confirmationUrl) {
-        // открываем в новой вкладке
-        window.open(data.confirmationUrl, '_blank');
-
-        // // добавим paymentId в success.html
-        // const url = new URL(data.confirmationUrl);
-        // url.searchParams.set('paymentId', data.paymentId);
-        
-      } else {
-        alert('Ошибка при создании платежа');
-      }
-    } catch (err) {
-      console.error('Ошибка при оплате:', err);
-      alert('Ошибка при оплате');
-    }
-});
-
-// Закрытие модалки
-document.querySelectorAll('.close').forEach(c => {
-    c.onclick = () => {
-        c.parentElement.parentElement.style.display = 'none';
-    };
-});
 
 // Модалки для скриншотов
 document.querySelectorAll('.download-card .swiper-slide img').forEach(img => {
@@ -359,25 +301,53 @@ if (buyBtnTop) {
 
 // Нижняя кнопка — запуск оплаты
 const buyBtnBottom = document.getElementById('buyBtnBottom');
-if (buyBtnBottom) {
-  buyBtnBottom.addEventListener('click', async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('/api/payment/create-payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const data = await response.json();
 
-      if (data.confirmationUrl) {
-        // На всех устройствах открываем в новой вкладке
-        window.open(data.confirmationUrl, '_blank');
-      } else {
-        alert('Ошибка при создании платежа');
-      }
-    } catch (err) {
-      console.error('Ошибка при оплате:', err);
-      alert('Ошибка при оплате');
+buyBtnBottom.addEventListener('click', (e) => {
+  e.preventDefault();
+
+  createPaymentAndOpenWidget();
+});
+
+async function createPaymentAndOpenWidget() {
+  try {
+    const response = await fetch('/api/payment/create-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await response.json();
+
+    if (!data.confirmationUrl) {
+      alert('Ошибка при создании платежа');
+      return;
     }
-  });
+
+    // создаем Checkout Widget
+    const widget = new YooMoneyCheckoutWidget({
+      confirmation_url: data.confirmationUrl,
+      onSuccess: async function(payment) {
+        console.log('✅ Оплата прошла!', payment);
+
+        // получаем одноразовую ссылку
+        const downloadResponse = await fetch('/api/payment/last-download');
+        const downloadData = await downloadResponse.json();
+
+        if (downloadData.downloadUrl) {
+          const link = document.getElementById('downloadLink');
+          link.href = downloadData.downloadUrl;
+          document.getElementById('downloadContainer').style.display = 'block';
+        }
+      },
+      onFail: function(payment) {
+        alert('Оплата не прошла');
+      }
+    });
+
+    // монтируем виджет
+    document.getElementById('paymentWidgetContainer').innerHTML = '';
+    widget.mount('#paymentWidgetContainer');
+
+  } catch (err) {
+    console.error(err);
+    alert('Ошибка при оплате');
+  }
 }
