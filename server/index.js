@@ -16,14 +16,14 @@ app.use('/api/reviews', reviewsRoute);
 const feedbackRoute = require('./routes/feedback');
 app.use('/api/feedback', feedbackRoute);
 
-// const downloadRoute = require('./routes/download');
-// app.use('/api/download', downloadRoute);
-
 const { router: downloadRoute } = require('./routes/download');
 app.use('/api/download', downloadRoute);
 
 const paymentRoute = require('./routes/payment');
 app.use('/api/payment', paymentRoute);
+
+const debugRoute = require('./routes/debug');
+app.use('/api/debug', debugRoute);
 
 // Запуск сервера
 app.listen(port, () => {
