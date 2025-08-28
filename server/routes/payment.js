@@ -3,6 +3,8 @@ const router = express.Router();
 const YooKassa = require('yookassa');
 const { v4: uuidv4 } = require('uuid');
 const { generateToken } = require('./download'); // используем из download.js
+const { readJSON, writeJSON } = require('../utils'); // ⚡ подключаем
+const path = require('path');
 
 const shopId = process.env.YOOKASSA_SHOP_ID || '1152688';
 const secretKey = process.env.YOOKASSA_SECRET || 'test_vXhN6nzVtqVxM4xlqEWPNoi4cK5wQ8Ol3NgFW3ZFrE4';
@@ -43,6 +45,21 @@ router.post('/webhook', express.json(), async (req, res) => {
       // генерируем одноразовую ссылку
       const token = generateToken('pack.zip'); // ⚡ твой файл
       lastDownloadUrl = `/api/download/${token}`;
+
+      // Логирование в payments.json
+      let payments = readJSON('payments.json') || [];
+      payments.push({
+        id: event.object.id,
+        amount: event.object.amount.value,
+        currency: event.object.amount.currency,
+        status: event.object.status,
+        created_at: new Date().toISOString(),
+        description: event.object.description,
+        downloadUrl: lastDownloadUrl
+      });
+      writeJSON('payments.json', payments);
+
+      console.log(`💾 Платёж ${event.object.id} записан в payments.json`);
     }
 
     res.sendStatus(200);

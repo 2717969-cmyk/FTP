@@ -14,8 +14,9 @@
       const data = await response.json();
 
       if (data.downloadUrl) {
-        document.getElementById('download-container').innerHTML =
-          `<a href="${data.downloadUrl}">Скачать файл</a>`;
+        // Открываем ссылку на скачивание в новой вкладке
+        window.open(data.downloadUrl, '_blank');
+        document.getElementById('download-container').innerText = 'Ссылка на скачивание открылась в новой вкладке';
       } else {
         document.getElementById('download-container').innerText =
           `Статус: ${data.status || 'Ожидание оплаты...'}`;
