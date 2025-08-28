@@ -134,17 +134,15 @@ document.querySelectorAll('.close').forEach(c => {
 });
 
 // Модалки для скриншотов
-document.querySelectorAll('.download-card img').forEach(img=>{
-    img.addEventListener('click', ()=>{
-
-        const card = img.closest('.download-card');
-        if (card.classList.contains('no-modal')) return; // 🚫 пропускаем эти карточки
-
+document.querySelectorAll('.download-card .swiper-slide img').forEach(img => {
+    img.addEventListener('click', () => {
         const modal = document.getElementById('imgModal');
         const wrapper = document.getElementById('imgModalWrapper');
         wrapper.innerHTML = '';
-        const parentSwiper = img.closest('.download-card').querySelectorAll('.swiper-slide img');
-        parentSwiper.forEach(i=>{
+
+        const card = img.closest('.download-card');
+        const parentSwiper = card.querySelectorAll('.swiper-slide img');
+        parentSwiper.forEach(i => {
             let div = document.createElement('div');
             div.className = 'swiper-slide';
             let im = document.createElement('img');
@@ -152,8 +150,11 @@ document.querySelectorAll('.download-card img').forEach(img=>{
             div.appendChild(im);
             wrapper.appendChild(div);
         });
+
         modal.style.display = 'block';
-        new Swiper('.imgSwiper', { navigation:{nextEl:'.swiper-button-next', prevEl:'.swiper-button-prev'} });
+        new Swiper('.imgSwiper', {
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+        });
     });
 });
 
