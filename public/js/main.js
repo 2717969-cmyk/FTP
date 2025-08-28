@@ -370,8 +370,8 @@ if (buyBtnBottom) {
       const data = await response.json();
 
       if (data.confirmationUrl) {
-        // На мобилках лучше редирект в этой же вкладке
-        window.location.href = data.confirmationUrl;
+        // На всех устройствах открываем в новой вкладке
+        window.open(data.confirmationUrl, '_blank');
       } else {
         alert('Ошибка при создании платежа');
       }

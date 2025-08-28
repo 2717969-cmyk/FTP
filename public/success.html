@@ -15,13 +15,17 @@
         const data = await response.json();
 
         if (data.downloadUrl) {
-          // Показываем ссылку для скачивания
+          // Автоматически открываем новую вкладку с файлом
+          window.open(data.downloadUrl, '_blank');
+
+          // Также показываем ссылку на случай блокировки всплывающего окна
           const a = document.createElement('a');
           a.href = data.downloadUrl;
-          a.target = '_blank'; // откроется в новой вкладке
-          a.textContent = 'Скачать файл';
-          document.getElementById('download-container').innerHTML = '';
-          document.getElementById('download-container').appendChild(a);
+          a.target = '_blank';
+          a.textContent = 'Скачать файл (если всплывающее окно заблокировано)';
+          const container = document.getElementById('download-container');
+          container.innerHTML = '';
+          container.appendChild(a);
         } else {
           document.getElementById('download-container').innerText =
             `Статус: ${data.status || 'Ожидание оплаты...'}`;

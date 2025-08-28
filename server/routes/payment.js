@@ -73,7 +73,7 @@ router.post('/webhook', express.json(), async (req, res) => {
 router.get('/last-download', (req, res) => {
   if (lastDownloadUrl) {
     res.json({ downloadUrl: lastDownloadUrl });
-    lastDownloadUrl = null; // одноразово
+    // lastDownloadUrl = null; // одноразово
   } else {
     res.json({ status: 'wait' });
   }
