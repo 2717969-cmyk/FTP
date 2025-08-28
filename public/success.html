@@ -10,15 +10,7 @@
 
   <script>
     async function checkPayment() {
-      const params = new URLSearchParams(window.location.search);
-      const paymentId = params.get('paymentId');
-
-      if (!paymentId) {
-        document.getElementById('download-container').innerText = 'Ошибка: нет ID платежа';
-        return;
-      }
-
-      const response = await fetch(`/api/payment/confirm?paymentId=${paymentId}`);
+      const response = await fetch('/api/payment/last-download');
       const data = await response.json();
 
       if (data.downloadUrl) {
@@ -26,7 +18,8 @@
           `<a href="${data.downloadUrl}">Скачать файл</a>`;
       } else {
         document.getElementById('download-container').innerText =
-          `Статус платежа: ${data.status}`;
+          `Статус: ${data.status || 'Ожидание оплаты...'}`;
+        setTimeout(checkPayment, 3000); // повторяем каждые 3 сек пока нет
       }
     }
 
