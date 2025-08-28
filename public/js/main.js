@@ -99,8 +99,8 @@ updatePrice();
 
 // Блок для оплаты
 
-document.getElementById('buyBtn').addEventListener('click', async () => {
-    e.preventDefault();
+document.getElementById('buyBtn').addEventListener('click', async (event) => {
+    event.preventDefault();
     try {
       const response = await fetch('/api/payment/create-payment', {
         method: 'POST',
