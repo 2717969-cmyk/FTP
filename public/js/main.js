@@ -149,15 +149,24 @@ document.querySelectorAll('.download-card .swiper-slide img').forEach(img => {
         parentSwiper.forEach(i => {
             let div = document.createElement('div');
             div.className = 'swiper-slide';
+
+            let zoomWrapper = document.createElement('div');
+            zoomWrapper.className = 'swiper-zoom-container';
+
             let im = document.createElement('img');
             im.src = i.src;
-            div.appendChild(im);
+
+            zoomWrapper.appendChild(im);
+            div.appendChild(zoomWrapper);
             wrapper.appendChild(div);
         });
 
         modal.style.display = 'block';
         new Swiper('.imgSwiper', {
-            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            zoom: {
+                maxRatio: 3, // во сколько раз можно увеличить
+            }
         });
     });
 });
@@ -335,3 +344,40 @@ document.getElementById('addReview').addEventListener('click', () => {
     })
     .catch(err => console.error('Ошибка отправки отзыва:', err));
 });
+
+// Верхняя кнопка — плавный скролл вниз к секции "Купить пакет"
+const buyBtnTop = document.getElementById('buyBtnTop');
+if (buyBtnTop) {
+  buyBtnTop.addEventListener('click', (e) => {
+    e.preventDefault();
+    const buySection = document.getElementById('buy');
+    if (buySection) {
+      buySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}
+
+// Нижняя кнопка — запуск оплаты
+const buyBtnBottom = document.getElementById('buyBtnBottom');
+if (buyBtnBottom) {
+  buyBtnBottom.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/payment/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await response.json();
+
+      if (data.confirmationUrl) {
+        // На мобилках лучше редирект в этой же вкладке
+        window.location.href = data.confirmationUrl;
+      } else {
+        alert('Ошибка при создании платежа');
+      }
+    } catch (err) {
+      console.error('Ошибка при оплате:', err);
+      alert('Ошибка при оплате');
+    }
+  });
+}

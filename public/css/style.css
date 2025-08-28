@@ -91,6 +91,55 @@ footer { text-align:center; padding:25px; background:#f0f0f0; margin-top:40px; f
   z-index: 1000;
 }
 
+/* 1) Чуть поправим общую раскладку модалки, чтобы Swiper мог занять всю высоту */
+.imgModal-content {
+  display: flex;
+  flex-direction: column;   /* чтобы заголовок/крестик были сверху, а слайдер занял остальное */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Swiper растягивается по высоте контейнера */
+.imgModal .swiper {
+  width: 100%;
+  height: 100%;
+  flex: 1;                  /* занимать доступное пространство внутри .imgModal-content */
+}
+
+/* Стрелкам чуть больше «тап»-зона на мобильных */
+.imgModal .swiper-button-next,
+.imgModal .swiper-button-prev {
+  width: 44px;
+  height: 44px;
+}
+
+/* 2) Мобильная адаптация */
+@media (max-width: 768px) {
+  .imgModal-content {
+    width: 95%;
+    max-width: 500px;
+    height: 90vh;          /* почти весь экран по высоте */
+    margin: 2% auto;
+    padding: 12px;
+  }
+
+  .imgModal .swiper {
+    height: 100%;          /* берём всю высоту модалки */
+  }
+
+  .imgModal .swiper-slide img {
+    max-width: 100%;
+    max-height: 80vh;      /* не вылезать за экран */
+    object-fit: contain;
+  }
+
+  .close {
+    top: 6px;
+    right: 10px;
+    font-size: 28px;       /* чуть крупнее для пальца */
+  }
+}
+
 .contact-form { max-width:600px; margin:40px auto; padding:20px; background:white; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.05);}
 .contact-form h3 { color:#4CAF50; margin-bottom:15px;}
 .contact-form input, .contact-form textarea { width:100%; padding:10px; margin-bottom:10px; border-radius:6px; border:1px solid #ccc; box-sizing:border-box;}
