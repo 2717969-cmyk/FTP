@@ -99,7 +99,7 @@ updatePrice();
 
 // Блок для оплаты
 
-document.getElementById('buyBtn').addEventListener('click', async (event) => {
+document.getElementById('buyBtnBottom').addEventListener('click', async (event) => {
     event.preventDefault();
     try {
       const response = await fetch('/api/payment/create-payment', {
@@ -136,6 +136,10 @@ document.querySelectorAll('.close').forEach(c => {
 // Модалки для скриншотов
 document.querySelectorAll('.download-card img').forEach(img=>{
     img.addEventListener('click', ()=>{
+
+        const card = img.closest('.download-card');
+        if (card.classList.contains('no-modal')) return; // 🚫 пропускаем эти карточки
+
         const modal = document.getElementById('imgModal');
         const wrapper = document.getElementById('imgModalWrapper');
         wrapper.innerHTML = '';
