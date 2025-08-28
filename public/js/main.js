@@ -142,6 +142,10 @@ document.querySelectorAll('.download-card .swiper-slide img').forEach(img => {
 
         const card = img.closest('.download-card');
         const parentSwiper = card.querySelectorAll('.swiper-slide img');
+
+        // Игнорируем карточки без скриншотов
+        if (!parentSwiper.length) return;
+
         parentSwiper.forEach(i => {
             let div = document.createElement('div');
             div.className = 'swiper-slide';
