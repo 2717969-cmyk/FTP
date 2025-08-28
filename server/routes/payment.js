@@ -9,44 +9,56 @@ const secretKey = process.env.YOOKASSA_SECRET || 'test_vXhN6nzVtqVxM4xlqEWPNoi4c
 
 const yooKassa = new YooKassa({ shopId, secretKey });
 
+// 🛠 тут будем хранить "последнюю ссылку на скачивание"
+let lastDownloadUrl = null;
+
 // Создание платежа
 router.post('/create-payment', async (req, res) => {
   try {
     const payment = await yooKassa.createPayment({
       amount: { value: '300.00', currency: 'RUB' },
-      confirmation: { type: 'redirect', return_url: `https://ftp-3piv.onrender.com/success.html` },
+      confirmation: {
+        type: 'redirect',
+        return_url: `https://ftp-3piv.onrender.com/success.html`
+      },
       capture: true,
       description: 'Оплата пакета файлов',
     }, uuidv4());
 
-     // вручную добавляем paymentId в ссылку
-    const url = new URL(payment.confirmation.confirmation_url);
-    url.searchParams.set('paymentId', payment.id);
-
-    res.json({ confirmationUrl: url.toString(), paymentId: payment.id });
+    res.json({ confirmationUrl: payment.confirmation.confirmation_url });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Ошибка создания платежа' });
   }
 });
 
-// Проверка платежа и генерация ссылки
-router.get('/confirm', async (req, res) => {
-  const { paymentId } = req.query;
-  if (!paymentId) return res.status(400).json({ error: 'Нет paymentId' });
-
+// 📌 Webhook от Юкассы (сюда она будет стучать при `payment.succeeded`)
+router.post('/webhook', express.json(), async (req, res) => {
   try {
-    const payment = await yooKassa.getPayment(paymentId);
+    const event = req.body;
 
-    if (payment.status === 'succeeded') {
-      const token = generateToken('pack.zip'); // ⚡ здесь укажи реальный файл
-      return res.json({ downloadUrl: `/api/download/${token}` });
-    } else {
-      return res.json({ status: payment.status });
+    if (event.event === 'payment.succeeded') {
+      console.log('✅ Оплата прошла:', event.object.id);
+
+      // генерируем одноразовую ссылку
+      const token = generateToken('pack.zip'); // ⚡ твой файл
+      lastDownloadUrl = `/api/download/${token}`;
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Ошибка проверки платежа' });
+
+    res.sendStatus(200);
+  } catch (err) {
+    console.error('Ошибка в webhook:', err);
+    res.sendStatus(500);
+  }
+});
+
+// 📌 success.html будет запрашивать здесь ссылку
+router.get('/last-download', (req, res) => {
+  if (lastDownloadUrl) {
+    res.json({ downloadUrl: lastDownloadUrl });
+    lastDownloadUrl = null; // одноразово
+  } else {
+    res.json({ status: 'wait' });
   }
 });
 
