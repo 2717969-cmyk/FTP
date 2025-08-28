@@ -112,9 +112,9 @@ document.getElementById('buyBtn').addEventListener('click', async () => {
         // открываем в новой вкладке
         window.open(data.confirmationUrl, '_blank');
 
-        // добавим paymentId в success.html
-        const url = new URL(data.confirmationUrl);
-        url.searchParams.set('paymentId', data.paymentId);
+        // // добавим paymentId в success.html
+        // const url = new URL(data.confirmationUrl);
+        // url.searchParams.set('paymentId', data.paymentId);
         
       } else {
         alert('Ошибка при создании платежа');
