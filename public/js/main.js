@@ -309,7 +309,7 @@ if (buyBtnTop) {
   });
 }
 
-// Нижняя кнопка — запуск оплаты
+
 // Нижняя кнопка — запуск оплаты
 const buyBtnBottom = document.getElementById('buyBtnBottom');
 
@@ -328,8 +328,8 @@ buyBtnBottom.addEventListener('click', async (e) => {
       return;
     }
 
-    // всегда открываем в новой вкладке
-    window.open(data.confirmationUrl, '_blank');
+    // переходим в том же окне, чтобы потом вернуться на success.html
+    window.location.href = data.confirmationUrl;
 
   } catch (err) {
     console.error(err);

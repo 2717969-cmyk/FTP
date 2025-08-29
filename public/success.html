@@ -9,31 +9,37 @@
   <div id="download-container">Проверяем оплату...</div>
 
   <script>
+    let downloadOpened = false; // чтобы не открывать файл несколько раз
+
     async function checkPayment() {
       try {
         const response = await fetch('/api/payment/last-download');
         const data = await response.json();
 
-        if (data.downloadUrl) {
-          // Автоматически открываем новую вкладку с файлом
-          window.open(data.downloadUrl, '_blank');
+        const container = document.getElementById('download-container');
 
-          // Также показываем ссылку на случай блокировки всплывающего окна
-          const a = document.createElement('a');
-          a.href = data.downloadUrl;
-          a.target = '_blank';
-          a.textContent = 'Скачать файл (если всплывающее окно заблокировано)';
-          const container = document.getElementById('download-container');
-          container.innerHTML = '';
-          container.appendChild(a);
+        if (data.downloadUrl) {
+          if (!downloadOpened) {
+            // создаём ссылку и автоматически кликаем
+            const a = document.createElement('a');
+            a.href = data.downloadUrl;
+            a.target = '_blank';
+            a.textContent = 'Скачать файл (если всплывающее окно заблокировано)';
+            container.innerHTML = '';
+            container.appendChild(a);
+
+            // автоматический клик
+            a.click();
+            downloadOpened = true;
+          }
         } else {
-          document.getElementById('download-container').innerText =
-            `Статус: ${data.status || 'Ожидание оплаты...'}`;
+          container.innerText = `Статус: ${data.status || 'Ожидание оплаты...'}`;
           setTimeout(checkPayment, 3000); // проверяем каждые 3 секунды
         }
       } catch (err) {
         console.error(err);
         document.getElementById('download-container').innerText = 'Ошибка проверки оплаты';
+        setTimeout(checkPayment, 5000); // повтор через 5 секунд
       }
     }
 

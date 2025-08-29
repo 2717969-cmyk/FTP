@@ -4,7 +4,6 @@ const YooKassa = require('yookassa');
 const { v4: uuidv4 } = require('uuid');
 const { generateToken } = require('./download'); // используем из download.js
 const { readJSON, writeJSON } = require('../utils'); // ⚡ подключаем
-const path = require('path');
 
 const shopId = process.env.YOOKASSA_SHOP_ID || '1152688';
 const secretKey = process.env.YOOKASSA_SECRET || 'test_vXhN6nzVtqVxM4xlqEWPNoi4cK5wQ8Ol3NgFW3ZFrE4';
@@ -14,7 +13,7 @@ const yooKassa = new YooKassa({ shopId, secretKey });
 // 🛠 тут будем хранить "последнюю ссылку на скачивание"
 let lastDownloadUrl = null;
 
-// Создание платежа
+// ------------------- СОЗДАНИЕ ПЛАТЕЖА -------------------
 router.post('/create-payment', async (req, res) => {
   try {
     const payment = await yooKassa.createPayment({
@@ -27,14 +26,34 @@ router.post('/create-payment', async (req, res) => {
       description: 'Оплата пакета файлов',
     }, uuidv4());
 
-    res.json({ confirmationUrl: payment.confirmation.confirmation_url });
+    res.json({ 
+      confirmationUrl: payment.confirmation.confirmation_url,
+      paymentId: payment.id // 👈 теперь возвращаем
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Ошибка создания платежа' });
   }
 });
 
-// 📌 Webhook от Юкассы (сюда она будет стучать при `payment.succeeded`)
+// ------------------- ПРОВЕРКА СТАТУСА -------------------
+router.get('/status', async (req, res) => {
+  try {
+    const { paymentId } = req.query;
+    if (!paymentId) {
+      return res.status(400).json({ error: 'Нет paymentId' });
+    }
+
+    const payment = await yooKassa.getPayment(paymentId);
+
+    res.json({ status: payment.status }); // pending / waiting_for_capture / succeeded / canceled
+  } catch (error) {
+    console.error('Ошибка при проверке статуса платежа:', error);
+    res.status(500).json({ error: 'Ошибка проверки платежа' });
+  }
+});
+
+// ------------------- WEBHOOK -------------------
 router.post('/webhook', express.json(), async (req, res) => {
   try {
     const event = req.body;
@@ -69,11 +88,11 @@ router.post('/webhook', express.json(), async (req, res) => {
   }
 });
 
-// 📌 success.html будет запрашивать здесь ссылку
+// ------------------- ВЫДАЧА ССЫЛКИ -------------------
 router.get('/last-download', (req, res) => {
   if (lastDownloadUrl) {
     res.json({ downloadUrl: lastDownloadUrl });
-    // lastDownloadUrl = null; // одноразово
+    // lastDownloadUrl = null; // можешь вернуть если нужно одноразово
   } else {
     res.json({ status: 'wait' });
   }
