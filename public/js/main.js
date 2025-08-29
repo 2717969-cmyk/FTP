@@ -113,6 +113,16 @@ document.querySelectorAll('.download-card .swiper-slide img').forEach(img => {
     });
 });
 
+// Закрытие модалок по крестику
+document.querySelectorAll('.close').forEach(c => {
+    c.onclick = () => {
+        let modal = c.closest('.modal');
+        if (!modal) modal = c.closest('.imgModal');
+        if (!modal) modal = c.closest('.paymentModal'); // если есть
+        if (modal) modal.style.display = 'none';
+    };
+});
+
 // Обратная связь
 document.getElementById('sendFeedback').addEventListener('click', () => {
     const name = document.getElementById('contactName').value.trim();
@@ -300,15 +310,12 @@ if (buyBtnTop) {
 }
 
 // Нижняя кнопка — запуск оплаты
+// Нижняя кнопка — запуск оплаты
 const buyBtnBottom = document.getElementById('buyBtnBottom');
 
-buyBtnBottom.addEventListener('click', (e) => {
+buyBtnBottom.addEventListener('click', async (e) => {
   e.preventDefault();
 
-  createPaymentAndOpenWidget();
-});
-
-async function createPaymentAndOpenWidget() {
   try {
     const response = await fetch('/api/payment/create-payment', {
       method: 'POST',
@@ -321,33 +328,11 @@ async function createPaymentAndOpenWidget() {
       return;
     }
 
-    // создаем Checkout Widget
-    const widget = new YooMoneyCheckoutWidget({
-      confirmation_url: data.confirmationUrl,
-      onSuccess: async function(payment) {
-        console.log('✅ Оплата прошла!', payment);
-
-        // получаем одноразовую ссылку
-        const downloadResponse = await fetch('/api/payment/last-download');
-        const downloadData = await downloadResponse.json();
-
-        if (downloadData.downloadUrl) {
-          const link = document.getElementById('downloadLink');
-          link.href = downloadData.downloadUrl;
-          document.getElementById('downloadContainer').style.display = 'block';
-        }
-      },
-      onFail: function(payment) {
-        alert('Оплата не прошла');
-      }
-    });
-
-    // монтируем виджет
-    document.getElementById('paymentWidgetContainer').innerHTML = '';
-    widget.mount('#paymentWidgetContainer');
+    // всегда открываем в новой вкладке
+    window.open(data.confirmationUrl, '_blank');
 
   } catch (err) {
     console.error(err);
     alert('Ошибка при оплате');
   }
-}
+});
