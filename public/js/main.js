@@ -328,9 +328,12 @@ buyBtnBottom.addEventListener('click', async (e) => {
       return;
     }
 
-    // переходим в том же окне, чтобы потом вернуться на success.html
-    window.location.href = data.confirmationUrl;
+    // Открываем страницу оплаты в новой вкладке
+    window.open(data.confirmationUrl, '_blank');
 
+    // На текущей странице можно показать сообщение, что оплата открыта в новой вкладке
+    alert('Окно оплаты открыто в новой вкладке. После успешной оплаты вернитесь на сайт, чтобы скачать файл.');
+    
   } catch (err) {
     console.error(err);
     alert('Ошибка при оплате');

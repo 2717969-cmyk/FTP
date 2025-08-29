@@ -3,43 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <title>Оплата успешна</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      background-color: #f9f9f9;
+    }
+
+    #download-container {
+      margin-top: 30px;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+
+    #download-container.show {
+      opacity: 1;
+    }
+
+    a.download-link {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    a.download-link:hover {
+      background-color: #45a049;
+    }
+
+    .status-text {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
   <h1>Спасибо за оплату!</h1>
-  <div id="download-container">Проверяем оплату...</div>
+  <div id="download-container">
+    <div class="status-text">Проверяем оплату...</div>
+  </div>
 
   <script>
-    let downloadOpened = false; // чтобы не открывать файл несколько раз
-
     async function checkPayment() {
       try {
         const response = await fetch('/api/payment/last-download');
         const data = await response.json();
-
         const container = document.getElementById('download-container');
 
         if (data.downloadUrl) {
-          if (!downloadOpened) {
-            // создаём ссылку и автоматически кликаем
-            const a = document.createElement('a');
-            a.href = data.downloadUrl;
-            a.target = '_blank';
-            a.textContent = 'Скачать файл (если всплывающее окно заблокировано)';
-            container.innerHTML = '';
-            container.appendChild(a);
+          // создаём текст и ссылку
+          container.innerHTML = `
+            <div class="status-text">✅ Платёж подтверждён!</div>
+            <a class="download-link" href="${data.downloadUrl}" target="_blank">
+              Скачать файл
+            </a>
+          `;
+          // плавное появление
+          container.classList.add('show');
 
-            // автоматический клик
-            a.click();
-            downloadOpened = true;
-          }
+          // открываем всплывающее окно (если не заблокировано)
+          window.open(data.downloadUrl, '_blank');
         } else {
-          container.innerText = `Статус: ${data.status || 'Ожидание оплаты...'}`;
+          container.querySelector('.status-text').textContent =
+            `Статус: ${data.status || 'Ожидание оплаты...'}`;
           setTimeout(checkPayment, 3000); // проверяем каждые 3 секунды
         }
       } catch (err) {
         console.error(err);
-        document.getElementById('download-container').innerText = 'Ошибка проверки оплаты';
-        setTimeout(checkPayment, 5000); // повтор через 5 секунд
+        document.getElementById('download-container').innerHTML =
+          '<div class="status-text">Ошибка проверки оплаты</div>';
+        document.getElementById('download-container').classList.add('show');
       }
     }
 
